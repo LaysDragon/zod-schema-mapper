@@ -1,6 +1,6 @@
 # Zod Schema Mapper
 
-zod schema type mapper,its can create existed zod schema mapper base on condition type tester.
+zod schema type mapper,its can create new schema base on existed zod schema with condition type tester.
 
 ## Example
 ### Schema
