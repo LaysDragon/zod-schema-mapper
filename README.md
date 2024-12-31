@@ -202,6 +202,8 @@ console.log(jsonMapper.decode.parse(jsonData));
 - [x] ZodObject
 - [x] ZodArray
 - [x] ZodUnion
+
+### WIP
 - [ ] ZodLazy
 - [ ] ZodPromise
 - [ ] ZodFunction
