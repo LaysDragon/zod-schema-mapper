@@ -137,10 +137,10 @@ console.log(jsonMapper.decode.parse(jsonData));
 - z.custom
 - z.instanceof
 
-Since custom && instanceOf just combined ZodAny with superRefine,doesnt have existed ZodType class.
+Since `z.custom` & `z.instanceOf` just combined ZodAny with superRefine,doesnt have existed ZodType class.
 I have no way to indetify their schema in runtime.:(
 
-`z.instanceof` can replaced with `instanceOfClass` and `ZodInstaceOfClass` class come with package.
+`z.instanceof` can replaced with `instanceOfClass` and `ZodInstaceOfClass` class come with package provide some helper functions.
 
 ### example
 ```ts
