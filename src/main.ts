@@ -196,3 +196,10 @@ export function createMapper<
 ) {
   return createMidMapper(schema, schema, test, destMapper, targetMapper);
 }
+
+export function isSchema<T extends z.ZodTypeAny>(
+  target: T,
+  schema: z.ZodTypeAny
+): schema is T {
+  return target == schema;
+}
