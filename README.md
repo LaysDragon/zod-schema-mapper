@@ -3,7 +3,9 @@
 zod schema type mapper,its can create new schema base on existed zod schema with condition type tester.
 
 ## Example
+
 ### Schema
+
 ```ts
 export const dataSchema = z.object({
   id: z.string(),
@@ -35,6 +37,7 @@ export const data: Data = {
 ```
 
 ### Single Converter
+
 ```ts
 const jsonSchema = convertSchema(
   dataSchema,
@@ -69,6 +72,7 @@ console.log(jsonSchema.parse(data));
 ```
 
 ### Mapper
+
 ```ts
 const jsonMapper = createMapper(
   dataSchema,
@@ -131,18 +135,20 @@ console.log(jsonMapper.decode.parse(jsonData));
 //   }
 ```
 
-
-## Unsupport Type
+## custom and instanceof
 
 - z.custom
 - z.instanceof
 
-Since `z.custom` & `z.instanceOf` just combined ZodAny with superRefine,doesnt have existed ZodType class.
-I have no way to indetify their schema in runtime.:(
+~~Since `z.custom` & `z.instanceOf` just combined ZodAny with superRefine,doesnt have existed ZodType class.
+I have no way to indetify their schema in runtime.:(~~  
+
+ok,appearent there is workaround. But can only indetify schema base on instance instead of runtime class type or more general way. check [example](#example-with-zod-schema)
 
 `z.instanceof` can replaced with `instanceOfClass` and `ZodInstaceOfClass` class come with package provide some helper functions.
 
-### example
+### example with ZodInstaceOfClass
+
 ```ts
 export class Test {
   name: string | undefined;
@@ -152,7 +158,7 @@ export class Test {
 }
 
 export const dataSchema = z.object({
-//   value: z.instanceof(Test),
+  //   value: z.instanceof(Test),
   value: instanceOfClass(Test),
 });
 
@@ -191,7 +197,39 @@ console.log(jsonMapper.decode.parse(jsonData));
 // { value: Test { name: 'hello world' } }
 ```
 
+### example with zod schema
+
+```ts
+const testSchema = z.instanceof(Test);
+
+export const dataSchema = z.object({
+  //   value: z.instanceof(Test),
+  value: testSchema,
+});
+
+export type Data = z.infer<typeof dataSchema>;
+// type Data = {
+//   value: Test;
+// }
+
+export const data: Data = {
+  value: new Test("hello world"),
+};
+
+const jsonMapper = createMapper(
+  dataSchema,
+  (schema) => isSchema(testSchema, schema), // type prediction helper method come with package
+  (schema) => schema.transform((value) => value.name),
+  (schema) =>
+    z
+      .string()
+      .transform((value) => new Test(value))
+      .pipe(schema)
+).mapper();
+```
+
 ## Support Type
+
 - [x] ZodString
 - [x] ZodNumber
 - [x] ZodNaN
@@ -204,6 +242,7 @@ console.log(jsonMapper.decode.parse(jsonData));
 - [x] ZodUnion
 
 ### WIP
+
 - [ ] ZodLazy
 - [ ] ZodPromise
 - [ ] ZodFunction
