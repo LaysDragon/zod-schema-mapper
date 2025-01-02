@@ -3,9 +3,7 @@ import { expect, test, describe, it, expectTypeOf } from "vitest";
 import { Data, dataSchema, Test, testData } from "./model.js";
 import { z } from "zod";
 import exp from "constants";
-import { convertSchema, createMapper } from "../src/main.js";
-import { instanceOfClass, ZodInstaceOfClass } from "../src/custom.js";
-// import { jsonSchemaMapper } from "../src/converter.js";
+import { createMapper, ZodInstaceOfClass } from "../src/main.js";
 
 export function jsonSchemaMapper<ZType extends z.ZodTypeAny>(schema: ZType) {
   return createMapper(
