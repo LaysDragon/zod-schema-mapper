@@ -123,6 +123,18 @@ export function convertSchemaRecurisive<
   }
 }
 
+interface MidSchema<
+  ZType extends z.ZodTypeAny,
+  Target extends z.ZodTypeAny,
+  DestMapper extends z.ZodTypeAny
+> {
+  convert<MTarget extends z.ZodTypeAny, MDestMapper extends z.ZodTypeAny>(
+    test: ZodTypeTester<MTarget>,
+    mapper: ZodTypeMapper<MTarget, MDestMapper>
+  ): MidSchema<ZodTypeConvert<ZType, Target, DestMapper>, MTarget, MDestMapper>;
+  schema: () => ZodTypeConvert<ZType, Target, DestMapper>;
+}
+
 export function convertSchema<
   ZType extends z.ZodTypeAny,
   Target extends z.ZodTypeAny,
@@ -131,7 +143,7 @@ export function convertSchema<
   schema: ZType,
   test: ZodTypeTester<Target>,
   mapper: ZodTypeMapper<Target, DestMapper>
-) {
+): MidSchema<ZType, Target, DestMapper> {
   return {
     convert<Target extends z.ZodTypeAny, DestMapper extends z.ZodTypeAny>(
       test: ZodTypeTester<Target>,
@@ -140,6 +152,43 @@ export function convertSchema<
       return convertSchema(this.schema(), test, mapper);
     },
     schema: () => convertSchemaRecurisive(schema, test, mapper),
+  };
+}
+
+interface MidMapper<
+  DestSchema extends z.ZodTypeAny,
+  TargetSchema extends z.ZodTypeAny,
+  Target extends z.ZodTypeAny,
+  DestMapper extends z.ZodTypeAny,
+  TargetMapper extends z.ZodTypeAny
+> {
+  create<
+    MTarget extends z.ZodTypeAny,
+    MDestMapper extends z.ZodTypeAny,
+    MTargetMapper extends z.ZodTypeAny
+  >(
+    test: ZodTypeTester<MTarget>,
+    destMapper: ZodTypeMapper<MTarget, MDestMapper>,
+    targetMapper: ZodTypeMapper<MTarget, MTargetMapper>
+  ): MidMapper<
+    ZodTypeConvert<DestSchema, Target, DestMapper>,
+    ZodTypeConvert<TargetSchema, Target, TargetMapper>,
+    MTarget,
+    MDestMapper,
+    MTargetMapper
+  >;
+
+  mapper: () => {
+    encoderSchema: ZodTypeConvert<DestSchema, Target, DestMapper>;
+    decoderSchema: ZodTypeConvert<TargetSchema, Target, TargetMapper>;
+    encode: (
+      data: unknown,
+      params?: Partial<z.ParseParams>
+    ) => z.infer<ZodTypeConvert<DestSchema, Target, DestMapper>>;
+    decode: (
+      data: unknown,
+      params?: Partial<z.ParseParams>
+    ) => z.infer<ZodTypeConvert<TargetSchema, Target, TargetMapper>>;
   };
 }
 
@@ -155,7 +204,7 @@ function createMidMapper<
   test: ZodTypeTester<Target>,
   destMapper: ZodTypeMapper<Target, DestMapper>,
   targetMapper: ZodTypeMapper<Target, TargetMapper>
-) {
+): MidMapper<DestSchema, TargetSchema, Target, DestMapper, TargetMapper> {
   let mapper = {
     encode: convertSchema(destSchema, test, destMapper).schema(),
     decode: convertSchema(targetSchema, test, targetMapper).schema(),
