@@ -1,9 +1,12 @@
 // sum.test.js
-import { expect, test, describe, it, expectTypeOf } from "vitest";
+import { expect, describe, it, expectTypeOf } from "vitest";
 import { Data, dataSchema, Test, testData } from "./model.js";
 import { z } from "zod";
-import exp from "constants";
-import { createMapper, ZodInstaceOfClass } from "../src/main.js";
+import {
+  createMapper,
+  instanceOfClass,
+  ZodInstaceOfClass,
+} from "../src/main.js";
 
 export function jsonSchemaMapper<ZType extends z.ZodTypeAny>(schema: ZType) {
   return createMapper(
@@ -74,10 +77,7 @@ describe("create converter schema", () => {
 
   describe("json to data", () => {
     let jsonData = jsonMapper.encode.parse(testData);
-    console.dir(jsonData);
-    // type a = z.input<typeof jsonMapper.decode>;
     let data = jsonMapper.decode.parse(jsonData);
-    console.dir(data);
 
     expectTypeOf(data).toEqualTypeOf<Data>();
 
@@ -100,5 +100,26 @@ describe("create converter schema", () => {
       expectTypeOf(data.class).toEqualTypeOf<Test>();
       expect(data.class.name).toEqual(testData.class.name);
     });
+  });
+});
+
+describe("instanceOfClass validation", () => {
+  const testSchema = z.object({
+    value: instanceOfClass(Test),
+  });
+
+  it("with valid input", () => {
+    const validData = {
+      value: new Test("valid"),
+    };
+    expect(testSchema.safeParse(validData).success).toBeTruthy();
+  });
+
+  it("with invalid input", () => {
+    class NotTest{};
+    const invalidData = {
+      value: new NotTest(),
+    };
+    expect(testSchema.safeParse(invalidData).success).toBeFalsy();
   });
 });

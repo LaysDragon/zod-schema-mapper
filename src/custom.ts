@@ -22,7 +22,7 @@ export class ZodInstaceOfClass<T extends typeof Class> extends z.ZodType<
       const ctx = this._getOrReturnCtx(input);
       addIssueToContext(ctx, {
         code: z.ZodIssueCode.custom,
-        message: `Input not instance of ${this._def.cls.name}`,
+        message: `Input not instance of '${this._def.cls.name}',get '${input.data.constructor.name}' instead`,
         fatal: true,
       });
       return z.INVALID;
