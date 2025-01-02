@@ -1,6 +1,6 @@
 import { Scalars, z } from "zod";
-import { ZodTypeConvert } from "./type.js";
-import { ZodInstaceOfClass, zodInstaceOfClassTypeName } from "./custom.js";
+import { ZodTypeConvert } from "./type";
+import { ZodInstaceOfClass, zodInstaceOfClassTypeName } from "./custom";
 
 type ZodTypeTester<Source extends T, T = any> = (schema: T) => schema is Source;
 type ZodTypeMapper<S extends z.ZodTypeAny, M extends z.ZodTypeAny> = (

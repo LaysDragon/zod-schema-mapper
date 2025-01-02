@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { convertSchema } from "../src/main.js";
-import { data, dataSchema } from "./data.js";
+import { convertSchema } from "../src/main";
+import { data, dataSchema } from "./data";
 
 const jsonSchema = convertSchema(
   dataSchema,

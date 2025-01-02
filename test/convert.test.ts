@@ -1,12 +1,12 @@
 // sum.test.js
 import { expect, describe, it, expectTypeOf } from "vitest";
-import { Data, dataSchema, Test, testData } from "./model.js";
+import { Data, dataSchema, Test, testData } from "./model";
 import { z } from "zod";
 import {
   createMapper,
   instanceOfClass,
   ZodInstaceOfClass,
-} from "../src/main.js";
+} from "../src/main";
 
 export function jsonSchemaMapper<ZType extends z.ZodTypeAny>(schema: ZType) {
   return createMapper(

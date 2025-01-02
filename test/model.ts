@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { instanceOfClass } from "../src/custom.js";
+import { instanceOfClass } from "../src/custom";
 
 export class Test {
   name: string | undefined;

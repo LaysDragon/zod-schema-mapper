@@ -1,3 +1,3 @@
-export * from "./custom.js";
-export * from "./converter.js";
-export * from "./type.js";
+export * from "./custom";
+export * from "./converter";
+export * from "./type";

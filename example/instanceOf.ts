@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { createMapper, isSchema } from "../src/main.js";
-import { instanceOfClass, ZodInstaceOfClass } from "../src/custom.js";
+import { createMapper, isSchema } from "../src/main";
 
 export class Test {
   name: string | undefined;
