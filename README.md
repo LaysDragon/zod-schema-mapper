@@ -96,7 +96,7 @@ const jsonMapper = createMapper(
   )
   .mapper();
 
-type Json = z.infer<typeof jsonMapper.encode>;
+type Json = z.infer<typeof jsonMapper.encoderSchema>;
 // type Json = {
 //   id: string;
 //   age: string;
@@ -115,7 +115,7 @@ const jsonData: Json = {
   testUnion: "1",
 };
 
-console.log(jsonMapper.encode.parse(data));
+console.log(jsonMapper.encode(data));
 //   {
 //     id: '1',
 //     age: '1',
@@ -124,7 +124,7 @@ console.log(jsonMapper.encode.parse(data));
 //     arrayNumber: [ '1', '2', '3' ],
 //     testUnion: '1'
 //   }
-console.log(jsonMapper.decode.parse(jsonData));
+console.log(jsonMapper.decode(jsonData));
 //   {
 //     id: '1',
 //     age: 1,
@@ -159,7 +159,7 @@ export class Test {
 }
 
 export const dataSchema = z.object({
-  //   value: z.instanceof(Test),
+//   value: z.instanceof(Test),
   value: instanceOfClass(Test),
 });
 
@@ -183,7 +183,7 @@ const jsonMapper = createMapper(
       .pipe(schema)
 ).mapper();
 
-type Json = z.infer<typeof jsonMapper.encode>;
+type Json = z.infer<typeof jsonMapper.encoderSchema>;
 // type Json = {
 //   value: string | undefined;
 // }
@@ -192,9 +192,9 @@ const jsonData: Json = {
   value: "hello world",
 };
 
-console.log(jsonMapper.encode.parse(data));
+console.log(jsonMapper.encode(data));
 // { value: 'hello world' }
-console.log(jsonMapper.decode.parse(jsonData));
+console.log(jsonMapper.decode(jsonData));
 // { value: Test { name: 'hello world' } }
 ```
 

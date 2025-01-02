@@ -170,7 +170,6 @@ function createMidMapper<
       destMapper: ZodTypeMapper<Target, DestMapper>,
       targetMapper: ZodTypeMapper<Target, TargetMapper>
     ) {
-      let mapper = this.mapper();
       return createMidMapper(
         mapper.encode,
         mapper.decode,
@@ -179,7 +178,18 @@ function createMidMapper<
         targetMapper
       );
     },
-    mapper: () => mapper,
+    mapper: () => ({
+      encoderSchema: mapper.encode,
+      decoderSchema: mapper.decode,
+      encode: mapper.encode.parse.bind(mapper.encode) as (
+        data: unknown,
+        params?: Partial<z.ParseParams>
+      ) => z.infer<typeof mapper.encode>,
+      decode: mapper.decode.parse.bind(mapper.decode) as (
+        data: unknown,
+        params?: Partial<z.ParseParams>
+      ) => z.infer<typeof mapper.decode>,
+    }),
   };
 }
 

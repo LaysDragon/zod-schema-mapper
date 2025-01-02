@@ -25,7 +25,7 @@ export const data: Data = {
 
 const jsonMapper = createMapper(
   dataSchema,
-  (schema) => isSchema(testSchema, schema),
+  (schema) => isSchema(testSchema, schema), // type prediction helper method come with package
   (schema) => schema.transform((value) => value.name),
   (schema) =>
     z
@@ -34,7 +34,7 @@ const jsonMapper = createMapper(
       .pipe(schema)
 ).mapper();
 
-type Json = z.infer<typeof jsonMapper.encode>;
+type Json = z.infer<typeof jsonMapper.encoderSchema>;
 // type Json = {
 //   value: string | undefined;
 // }
@@ -43,7 +43,7 @@ const jsonData: Json = {
   value: "hello world",
 };
 
-console.log(jsonMapper.encode.parse(data));
+console.log(jsonMapper.encode(data));
 // { value: 'hello world' }
-console.log(jsonMapper.decode.parse(jsonData));
+console.log(jsonMapper.decode(jsonData));
 // { value: Test { name: 'hello world' } }

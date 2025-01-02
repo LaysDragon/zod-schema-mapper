@@ -2,11 +2,7 @@
 import { expect, describe, it, expectTypeOf } from "vitest";
 import { Data, dataSchema, Test, testData } from "./model";
 import { z } from "zod";
-import {
-  createMapper,
-  instanceOfClass,
-  ZodInstaceOfClass,
-} from "../src/main";
+import { createMapper, instanceOfClass, ZodInstaceOfClass } from "../src/main";
 
 export function jsonSchemaMapper<ZType extends z.ZodTypeAny>(schema: ZType) {
   return createMapper(
@@ -43,12 +39,12 @@ export function jsonSchemaMapper<ZType extends z.ZodTypeAny>(schema: ZType) {
 
 describe("create converter schema", () => {
   const jsonMapper = jsonSchemaMapper(dataSchema);
-  type DataJson = z.infer<typeof jsonMapper.encode>;
+  type DataJson = z.infer<typeof jsonMapper.encoderSchema>;
 
-  expectTypeOf(jsonMapper.encode).toMatchTypeOf<z.ZodTypeAny>();
+  expectTypeOf(jsonMapper.encoderSchema).toMatchTypeOf<z.ZodTypeAny>();
 
   describe("data to json", () => {
-    let jsonData = jsonMapper.encode.parse(testData);
+    let jsonData = jsonMapper.encode(testData);
 
     expectTypeOf(jsonData).toEqualTypeOf<DataJson>();
 
@@ -76,8 +72,8 @@ describe("create converter schema", () => {
   });
 
   describe("json to data", () => {
-    let jsonData = jsonMapper.encode.parse(testData);
-    let data = jsonMapper.decode.parse(jsonData);
+    let jsonData = jsonMapper.encode(testData);
+    let data = jsonMapper.decode(jsonData);
 
     expectTypeOf(data).toEqualTypeOf<Data>();
 

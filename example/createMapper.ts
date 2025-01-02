@@ -24,7 +24,7 @@ const jsonMapper = createMapper(
   )
   .mapper();
 
-type Json = z.infer<typeof jsonMapper.encode>;
+type Json = z.infer<typeof jsonMapper.encoderSchema>;
 // type Json = {
 //   id: string;
 //   age: string;
@@ -43,7 +43,7 @@ const jsonData: Json = {
   testUnion: "1",
 };
 
-console.log(jsonMapper.encode.parse(data));
+console.log(jsonMapper.encode(data));
 //   {
 //     id: '1',
 //     age: '1',
@@ -52,7 +52,7 @@ console.log(jsonMapper.encode.parse(data));
 //     arrayNumber: [ '1', '2', '3' ],
 //     testUnion: '1'
 //   }
-console.log(jsonMapper.decode.parse(jsonData));
+console.log(jsonMapper.decode(jsonData));
 //   {
 //     id: '1',
 //     age: 1,
