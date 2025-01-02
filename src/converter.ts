@@ -155,6 +155,12 @@ export function convertSchema<
   };
 }
 
+type ParseMethod<T> = (data: unknown, params?: Partial<z.ParseParams>) => T;
+
+export type SafeParseReturn<ZType extends z.ZodTypeAny> = z.SafeParseReturnType<
+  z.input<ZType>,
+  z.output<ZType>
+>;
 interface MidMapper<
   DestSchema extends z.ZodTypeAny,
   TargetSchema extends z.ZodTypeAny,
@@ -181,14 +187,37 @@ interface MidMapper<
   mapper: () => {
     encoderSchema: ZodTypeConvert<DestSchema, Target, DestMapper>;
     decoderSchema: ZodTypeConvert<TargetSchema, Target, TargetMapper>;
-    encode: (
-      data: unknown,
-      params?: Partial<z.ParseParams>
-    ) => z.infer<ZodTypeConvert<DestSchema, Target, DestMapper>>;
-    decode: (
-      data: unknown,
-      params?: Partial<z.ParseParams>
-    ) => z.infer<ZodTypeConvert<TargetSchema, Target, TargetMapper>>;
+    encode: ParseMethod<
+      z.output<ZodTypeConvert<DestSchema, Target, DestMapper>>
+    >;
+    decode: ParseMethod<
+      z.output<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
+    >;
+
+    encodeAsync: ParseMethod<
+      Promise<z.output<ZodTypeConvert<DestSchema, Target, DestMapper>>>
+    >;
+    decodeAsync: ParseMethod<
+      Promise<z.output<ZodTypeConvert<TargetSchema, Target, TargetMapper>>>
+    >;
+
+    encodeSafe: ParseMethod<
+      SafeParseReturn<ZodTypeConvert<DestSchema, Target, DestMapper>>
+    >;
+
+    decodeSafe: ParseMethod<
+      SafeParseReturn<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
+    >;
+
+    encodeSafeAsync: ParseMethod<
+      Promise<SafeParseReturn<ZodTypeConvert<DestSchema, Target, DestMapper>>>
+    >;
+
+    decodeSafeAsync: ParseMethod<
+      Promise<
+        SafeParseReturn<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
+      >
+    >;
   };
 }
 
@@ -230,14 +259,17 @@ function createMidMapper<
     mapper: () => ({
       encoderSchema: mapper.encode,
       decoderSchema: mapper.decode,
-      encode: mapper.encode.parse.bind(mapper.encode) as (
-        data: unknown,
-        params?: Partial<z.ParseParams>
-      ) => z.infer<typeof mapper.encode>,
-      decode: mapper.decode.parse.bind(mapper.decode) as (
-        data: unknown,
-        params?: Partial<z.ParseParams>
-      ) => z.infer<typeof mapper.decode>,
+      encode: mapper.encode.parse.bind(mapper.encode),
+      decode: mapper.decode.parse.bind(mapper.decode),
+
+      encodeAsync: mapper.encode.parseAsync.bind(mapper.encode),
+      decodeAsync: mapper.decode.parseAsync.bind(mapper.decode),
+
+      encodeSafe: mapper.encode.safeParse.bind(mapper.encode),
+      decodeSafe: mapper.decode.safeParse.bind(mapper.decode),
+
+      encodeSafeAsync: mapper.encode.safeParseAsync.bind(mapper.encode),
+      decodeSafeAsync: mapper.decode.safeParseAsync.bind(mapper.decode),
     }),
   };
 }
