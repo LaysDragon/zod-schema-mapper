@@ -107,7 +107,6 @@ describe("instanceOfClass validation", () => {
   const testSchema = z.object({
     value: instanceOfClass(Test),
   });
-
   it("with valid input", () => {
     const validData = {
       value: new Test("valid"),
@@ -116,10 +115,43 @@ describe("instanceOfClass validation", () => {
   });
 
   it("with invalid input", () => {
-    class NotTest{};
+    class NotTest {}
     const invalidData = {
       value: new NotTest(),
     };
     expect(testSchema.safeParse(invalidData).success).toBeFalsy();
+  });
+
+  describe("with private constructor", () => {
+    class PrivateTest {
+      value: string;
+      private constructor(value: string) {
+        this.value = value;
+      }
+      static create(value: string) {
+        return new PrivateTest(value);
+      }
+    }
+
+    const privateTestSchema = z.object({
+      value: instanceOfClass(PrivateTest),
+    });
+
+    it("with valid input", () => {
+      const validData = {
+        value: PrivateTest.create("valid"),
+      };
+      var result = privateTestSchema.safeParse(validData);
+      expectTypeOf(result.data!.value).toEqualTypeOf<PrivateTest>();
+      expect(result.success).toBeTruthy();
+    });
+
+    it("with invalid input", () => {
+      class NotTest {}
+      const invalidData = {
+        value: new NotTest(),
+      };
+      expect(privateTestSchema.safeParse(invalidData).success).toBeFalsy();
+    });
   });
 });

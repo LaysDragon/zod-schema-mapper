@@ -145,7 +145,8 @@ I have no way to indetify their schema in runtime.:(~~
 
 ok,appearent there is workaround. But can only indetify schema base on instance instead of runtime class type or more general way. check [example](#example-with-zod-schema)
 
-`z.instanceof` can replaced with `instanceOfClass` and `ZodInstaceOfClass` class come with package provide some helper functions.
+`z.instanceof` can replaced with `instanceOfClass`(`ZodInstaceOfClass`) class come with package provide some helper functions.  
+`instanceOfClass` support private constructor.
 
 ### example with ZodInstaceOfClass
 

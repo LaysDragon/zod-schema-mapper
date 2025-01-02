@@ -1,23 +1,33 @@
 import { addIssueToContext, z } from "zod";
 
-abstract class Class {
+type Class = typeof PublicClass | typeof PrivateClass;
+
+abstract class PublicClass {
   constructor(..._: any[]) {}
 }
 
+abstract class PrivateClass {
+  private constructor(..._: any[]) {}
+}
+
+// solution come from https://stackoverflow.com/a/74657881/9708333
+type GenericInstanceType<TClass> = InstanceType<{ new (): never } & TClass>;
+
 export const zodInstaceOfClassTypeName = "ZodInstaceOfClass";
 
-export interface ZodInstaceOfClassDef<T extends typeof Class>
-  extends z.ZodTypeDef {
+export interface ZodInstaceOfClassDef<T extends Class> extends z.ZodTypeDef {
   typeName: typeof zodInstaceOfClassTypeName;
   cls: T;
 }
 
-export class ZodInstaceOfClass<T extends typeof Class> extends z.ZodType<
-  InstanceType<T>,
+export class ZodInstaceOfClass<T extends Class> extends z.ZodType<
+  GenericInstanceType<T>,
   ZodInstaceOfClassDef<T>,
-  InstanceType<T>
+  GenericInstanceType<T>
 > {
-  override _parse(input: z.ParseInput): z.ParseReturnType<InstanceType<T>> {
+  override _parse(
+    input: z.ParseInput
+  ): z.ParseReturnType<GenericInstanceType<T>> {
     if (!(input.data instanceof this._def.cls)) {
       const ctx = this._getOrReturnCtx(input);
       addIssueToContext(ctx, {
@@ -28,14 +38,14 @@ export class ZodInstaceOfClass<T extends typeof Class> extends z.ZodType<
       return z.INVALID;
     }
 
-    return z.OK(input.data as InstanceType<T>);
+    return z.OK(input.data as GenericInstanceType<T>);
   }
 
-  isClass(cls: Class): cls is T {
+  isClass(cls: PublicClass): cls is T {
     return cls == this._def.cls;
   }
 
-  static isSchema<T extends typeof Class>(
+  static isSchema<T extends typeof PublicClass>(
     cls: T,
     schema: ZodInstaceOfClass<any>
   ): schema is ZodInstaceOfClass<T> {
@@ -48,7 +58,7 @@ export class ZodInstaceOfClass<T extends typeof Class> extends z.ZodType<
   static create = createZodInstaceOfClass;
 }
 
-function createZodInstaceOfClass<T extends typeof Class>(
+function createZodInstaceOfClass<T extends Class>(
   cls: T
   //   params?: z.RawCreateParams
 ) {
