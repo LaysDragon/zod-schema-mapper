@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createMapper, isSchema } from "../src/main";
+import { createMapper, isSchema } from "../src/main.js";
 
 export class Test {
   name: string | undefined;

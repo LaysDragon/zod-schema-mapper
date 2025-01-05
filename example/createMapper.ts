@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { createMapper } from "../src/main";
-import { data, dataSchema } from "./data";
+import { createMapper } from "../src/main.js";
+import { data, dataSchema } from "./data.js";
 
 const jsonMapper = createMapper(
   dataSchema,
