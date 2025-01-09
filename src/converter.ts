@@ -161,7 +161,45 @@ export type SafeParseReturn<ZType extends z.ZodTypeAny> = z.SafeParseReturnType<
   z.input<ZType>,
   z.output<ZType>
 >;
-interface MidMapper<
+
+export interface Mapper<
+  DestSchema extends z.ZodTypeAny,
+  TargetSchema extends z.ZodTypeAny,
+  Target extends z.ZodTypeAny,
+  DestMapper extends z.ZodTypeAny,
+  TargetMapper extends z.ZodTypeAny
+> {
+  encoderSchema: ZodTypeConvert<DestSchema, Target, DestMapper>;
+  decoderSchema: ZodTypeConvert<TargetSchema, Target, TargetMapper>;
+  encode: ParseMethod<z.output<ZodTypeConvert<DestSchema, Target, DestMapper>>>;
+  decode: ParseMethod<
+    z.output<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
+  >;
+
+  encodeAsync: ParseMethod<
+    Promise<z.output<ZodTypeConvert<DestSchema, Target, DestMapper>>>
+  >;
+  decodeAsync: ParseMethod<
+    Promise<z.output<ZodTypeConvert<TargetSchema, Target, TargetMapper>>>
+  >;
+
+  encodeSafe: ParseMethod<
+    SafeParseReturn<ZodTypeConvert<DestSchema, Target, DestMapper>>
+  >;
+
+  decodeSafe: ParseMethod<
+    SafeParseReturn<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
+  >;
+
+  encodeSafeAsync: ParseMethod<
+    Promise<SafeParseReturn<ZodTypeConvert<DestSchema, Target, DestMapper>>>
+  >;
+
+  decodeSafeAsync: ParseMethod<
+    Promise<SafeParseReturn<ZodTypeConvert<TargetSchema, Target, TargetMapper>>>
+  >;
+}
+export interface MidMapper<
   DestSchema extends z.ZodTypeAny,
   TargetSchema extends z.ZodTypeAny,
   Target extends z.ZodTypeAny,
@@ -184,41 +222,13 @@ interface MidMapper<
     MTargetMapper
   >;
 
-  mapper: () => {
-    encoderSchema: ZodTypeConvert<DestSchema, Target, DestMapper>;
-    decoderSchema: ZodTypeConvert<TargetSchema, Target, TargetMapper>;
-    encode: ParseMethod<
-      z.output<ZodTypeConvert<DestSchema, Target, DestMapper>>
-    >;
-    decode: ParseMethod<
-      z.output<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
-    >;
-
-    encodeAsync: ParseMethod<
-      Promise<z.output<ZodTypeConvert<DestSchema, Target, DestMapper>>>
-    >;
-    decodeAsync: ParseMethod<
-      Promise<z.output<ZodTypeConvert<TargetSchema, Target, TargetMapper>>>
-    >;
-
-    encodeSafe: ParseMethod<
-      SafeParseReturn<ZodTypeConvert<DestSchema, Target, DestMapper>>
-    >;
-
-    decodeSafe: ParseMethod<
-      SafeParseReturn<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
-    >;
-
-    encodeSafeAsync: ParseMethod<
-      Promise<SafeParseReturn<ZodTypeConvert<DestSchema, Target, DestMapper>>>
-    >;
-
-    decodeSafeAsync: ParseMethod<
-      Promise<
-        SafeParseReturn<ZodTypeConvert<TargetSchema, Target, TargetMapper>>
-      >
-    >;
-  };
+  mapper: () => Mapper<
+    DestSchema,
+    TargetSchema,
+    Target,
+    DestMapper,
+    TargetMapper
+  >;
 }
 
 function createMidMapper<

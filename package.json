@@ -1,6 +1,6 @@
 {
     "name": "@laysdragon/zod-schema-mapper",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "description": "schema type mapper for zod",
     "main": "lib/main.js",
     "files": [
