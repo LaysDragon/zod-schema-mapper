@@ -36,12 +36,9 @@ interface ZodTypeConverter<T extends z.ZodTypeAny> {
 // z.ZodMap;
 // z.ZodSet;
 // z.ZodRecord;
-// z.ZodNull;
 // z.ZodNullable;
-// z.ZodOptional;
 // z.ZodEnum;
 // z.ZodNever
-// z.ZodUndefined
 
 const directZodType: Array<[ZodTypeConstructor, string]> = [
   [z.ZodString, z.ZodFirstPartyTypeKind.ZodString],
@@ -54,6 +51,7 @@ const directZodType: Array<[ZodTypeConstructor, string]> = [
   [z.ZodEffects, z.ZodFirstPartyTypeKind.ZodEffects],
   [z.ZodPipeline, z.ZodFirstPartyTypeKind.ZodPipeline],
   [z.ZodUndefined, z.ZodFirstPartyTypeKind.ZodUndefined],
+  [z.ZodNull, z.ZodFirstPartyTypeKind.ZodNull],
   [ZodInstaceOfClass, zodInstaceOfClassTypeName],
 ] as const;
 

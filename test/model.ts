@@ -21,6 +21,7 @@ export const dataSchema = z.object({
   arrayDate: z.date().array(),
   arrayNumber: z.number().array(),
   testUnion: z.number().or(z.date()),
+  null: z.null(),
   testObj: z.object({
     createdAt: z.date(),
     expiredAt: z.date(),
@@ -45,6 +46,7 @@ export const testData: Data = {
   testUnion: 59,
   optinal: undefined,
   optinalData: new Date(),
+  null:null,
   testObj: {
     createdAt: new Date(),
     expiredAt: new Date(),
