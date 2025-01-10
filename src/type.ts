@@ -36,6 +36,8 @@ export type ZodTypeConvert<
   ? ZodTypeConvertUnion<ZType, Target, DestMapper, Options>
   : ZType extends z.ZodOptional<infer WrapperType>
   ? z.ZodOptional<ZodTypeConvert<WrapperType, Target, DestMapper>>
+  : ZType extends z.ZodNullable<infer WrapperType>
+  ? z.ZodNullable<ZodTypeConvert<WrapperType, Target, DestMapper>>
   : ZType;
 
 type ZodTypeConvertUnion<

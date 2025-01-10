@@ -36,7 +36,6 @@ interface ZodTypeConverter<T extends z.ZodTypeAny> {
 // z.ZodMap;
 // z.ZodSet;
 // z.ZodRecord;
-// z.ZodNullable;
 // z.ZodEnum;
 // z.ZodNever
 
@@ -94,6 +93,13 @@ const typeConverters: ZodTypeConverter<any>[] = [
     typeName: z.ZodFirstPartyTypeKind.ZodOptional,
     convert: (schema: z.ZodOptional<any>, test, mapper) => {
       return convertSchemaRecurisive(schema.unwrap(), test, mapper).optional();
+    },
+  },
+  {
+    type: z.ZodNullable,
+    typeName: z.ZodFirstPartyTypeKind.ZodNullable,
+    convert: (schema: z.ZodNullable<any>, test, mapper) => {
+      return convertSchemaRecurisive(schema.unwrap(), test, mapper).nullable();
     },
   },
   ...directTypeConverters(directZodType),

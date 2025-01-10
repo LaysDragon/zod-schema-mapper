@@ -71,8 +71,16 @@ describe("create converter schema", () => {
 
     it("check optional value", () => {
       expectTypeOf(jsonData.optinal).toEqualTypeOf<string | undefined>();
-      expect(jsonData.optinal).toEqual(testData.optinal?.toISOString());
+      expect(jsonData.optinal).toEqual(undefined);
       expect(jsonData.optinalData).toEqual(testData.optinalData?.toISOString());
+    });
+
+    it("check nullable value", () => {
+      expectTypeOf(jsonData.nullable).toEqualTypeOf<string | null>();
+      expect(jsonData.nullable).toEqual(null);
+      expect(jsonData.nullableData).toEqual(
+        testData.nullableData?.toISOString()
+      );
     });
 
     it("check custom class type", () => {
@@ -105,8 +113,14 @@ describe("create converter schema", () => {
 
     it("check optional value", () => {
       expectTypeOf(data.optinal).toEqualTypeOf<Date | undefined>();
-      expect(data.optinal).toEqual(data.optinal);
-      expect(data.optinalData).toEqual(data.optinalData);
+      expect(data.optinal).toEqual(undefined);
+      expect(data.optinalData).toEqual(testData.optinalData);
+    });
+
+    it("check nullable value", () => {
+      expectTypeOf(data.nullable).toEqualTypeOf<Date | null>();
+      expect(data.nullable).toEqual(null);
+      expect(data.nullableData).toEqual(testData.nullableData);
     });
 
     it("check custom class type", () => {
