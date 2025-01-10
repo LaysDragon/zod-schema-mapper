@@ -7,9 +7,16 @@ export class Test {
     this.name = name;
   }
 }
+enum Fruits {
+  Apple,
+  Banana,
+}
+const FishEnum = z.enum(["Salmon", "Tuna", "Trout"]);
 
 export const dataSchema = z.object({
   class: instanceOfClass(Test),
+  fish: FishEnum,
+  fruit: z.nativeEnum(Fruits),
   id: z.string(),
   name: z.string(),
   age: z.number(),
@@ -37,6 +44,8 @@ export type Data = z.infer<typeof dataSchema>;
 
 export const testData: Data = {
   class: new Test("hello world"),
+  fish: FishEnum.enum.Salmon,
+  fruit: Fruits.Apple,
   id: "1",
   name: "dragon",
   age: 18,

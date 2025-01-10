@@ -51,6 +51,8 @@ const directZodType: Array<[ZodTypeConstructor, string]> = [
   [z.ZodPipeline, z.ZodFirstPartyTypeKind.ZodPipeline],
   [z.ZodUndefined, z.ZodFirstPartyTypeKind.ZodUndefined],
   [z.ZodNull, z.ZodFirstPartyTypeKind.ZodNull],
+  [z.ZodEnum, z.ZodFirstPartyTypeKind.ZodEnum],
+  [z.ZodNativeEnum, z.ZodFirstPartyTypeKind.ZodNativeEnum],
   [ZodInstaceOfClass, zodInstaceOfClassTypeName],
 ] as const;
 
