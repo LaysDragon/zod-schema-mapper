@@ -5,8 +5,10 @@ type ZodObjectAny<
   Catchall extends z.ZodTypeAny = z.ZodTypeAny
 > = z.ZodObject<any, UnknownKeys, Catchall, any, any>;
 
-type ZodArrayAny<Cardinality extends z.ArrayCardinality = "many"> =
-  z.ZodArray<any, Cardinality>;
+type ZodArrayAny<Cardinality extends z.ArrayCardinality = "many"> = z.ZodArray<
+  any,
+  Cardinality
+>;
 
 type ZodObjFn<
   T extends z.ZodRawShape,
@@ -32,6 +34,8 @@ export type ZodTypeConvert<
   ? ZodTypeConvertArray<ZType, Target, DestMapper, Cardinality>
   : ZType extends z.ZodUnion<infer Options>
   ? ZodTypeConvertUnion<ZType, Target, DestMapper, Options>
+  : ZType extends z.ZodOptional<infer WrapperType>
+  ? z.ZodOptional<ZodTypeConvert<WrapperType, Target, DestMapper>>
   : ZType;
 
 type ZodTypeConvertUnion<

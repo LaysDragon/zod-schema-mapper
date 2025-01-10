@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { instanceOfClass } from "../src/custom";
+import { instanceOfClass } from "../src/custom.js";
 
 export class Test {
   name: string | undefined;
@@ -13,6 +13,9 @@ export const dataSchema = z.object({
   id: z.string(),
   name: z.string(),
   age: z.number(),
+  undefined: z.undefined(),
+  optinal: z.date().optional(),
+  optinalData: z.date().optional(),
   createdAt: z.date(),
   expiredAt: z.date(),
   arrayDate: z.date().array(),
@@ -34,11 +37,14 @@ export const testData: Data = {
   id: "1",
   name: "dragon",
   age: 18,
+  undefined: undefined,
   createdAt: new Date(),
   expiredAt: new Date(),
   arrayDate: [new Date()],
   arrayNumber: [128],
   testUnion: 59,
+  optinal: undefined,
+  optinalData: new Date(),
   testObj: {
     createdAt: new Date(),
     expiredAt: new Date(),

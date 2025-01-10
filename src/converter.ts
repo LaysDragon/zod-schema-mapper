@@ -91,6 +91,13 @@ const typeConverters: ZodTypeConverter<any>[] = [
       );
     },
   },
+  {
+    type: z.ZodOptional,
+    typeName: z.ZodFirstPartyTypeKind.ZodOptional,
+    convert: (schema: z.ZodOptional<any>, test, mapper) => {
+      return convertSchemaRecurisive(schema.unwrap(), test, mapper).optional();
+    },
+  },
   ...directTypeConverters(directZodType),
 ];
 

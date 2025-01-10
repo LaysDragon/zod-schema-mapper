@@ -1,8 +1,12 @@
 // sum.test.js
 import { expect, describe, it, expectTypeOf } from "vitest";
-import { Data, dataSchema, Test, testData } from "./model";
+import { Data, dataSchema, Test, testData } from "./model.js";
 import { z } from "zod";
-import { createMapper, instanceOfClass, ZodInstaceOfClass } from "../src/main";
+import {
+  createMapper,
+  instanceOfClass,
+  ZodInstaceOfClass,
+} from "../src/main.js";
 
 export function jsonSchemaMapper<ZType extends z.ZodTypeAny>(schema: ZType) {
   return createMapper(
@@ -65,6 +69,12 @@ describe("create converter schema", () => {
       expect(jsonData.testUnion).toEqual(String(testData.testUnion));
     });
 
+    it("check optional value", () => {
+      expectTypeOf(jsonData.optinal).toEqualTypeOf<string | undefined>();
+      expect(jsonData.optinal).toEqual(testData.optinal?.toISOString());
+      expect(jsonData.optinalData).toEqual(testData.optinalData?.toISOString());
+    });
+
     it("check custom class type", () => {
       expectTypeOf(jsonData.class).toEqualTypeOf<string | undefined>();
       expect(jsonData.class).toEqual(testData.class.name);
@@ -76,6 +86,7 @@ describe("create converter schema", () => {
     let data = jsonMapper.decode(jsonData);
 
     expectTypeOf(data).toEqualTypeOf<Data>();
+    expect(data).toEqual(testData);
 
     it("check object field", () => {
       expectTypeOf(data.createdAt).toEqualTypeOf<Date>();
@@ -90,6 +101,12 @@ describe("create converter schema", () => {
     it("check union value", () => {
       expectTypeOf(data.testUnion).toEqualTypeOf<number | Date>();
       expect(data.testUnion).toEqual(testData.testUnion);
+    });
+
+    it("check optional value", () => {
+      expectTypeOf(data.optinal).toEqualTypeOf<Date | undefined>();
+      expect(data.optinal).toEqual(data.optinal);
+      expect(data.optinalData).toEqual(data.optinalData);
     });
 
     it("check custom class type", () => {
