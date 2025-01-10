@@ -238,9 +238,16 @@ const jsonMapper = createMapper(
 - [x] ZodBoolean
 - [x] ZodDate
 - [x] ZodLiteral
+- [x] ZodNull
+- [x] ZodEnum
+- [x] ZodNativeEnum
+- [x] ZodUndefined
+
 - [x] ZodObject
 - [x] ZodArray
 - [x] ZodUnion
+- [x] ZodNullable
+- [x] ZodOptional
 
 ### WIP
 
@@ -250,10 +257,5 @@ const jsonMapper = createMapper(
 - [ ] ZodMap
 - [ ] ZodSet
 - [ ] ZodRecord
-- [ ] ZodNull
-- [ ] ZodNullable
-- [ ] ZodOptional
-- [ ] ZodEnum
-- [ ] ZodNever
+- [ ] ~~ZodNever~~
 - [ ] ZodTuple
-- [ ] ZodUndefined

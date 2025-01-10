@@ -36,8 +36,6 @@ interface ZodTypeConverter<T extends z.ZodTypeAny> {
 // z.ZodMap;
 // z.ZodSet;
 // z.ZodRecord;
-// z.ZodEnum;
-// z.ZodNever
 
 const directZodType: Array<[ZodTypeConstructor, string]> = [
   [z.ZodString, z.ZodFirstPartyTypeKind.ZodString],
