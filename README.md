@@ -242,6 +242,7 @@ const jsonMapper = createMapper(
 - [x] ZodEnum
 - [x] ZodNativeEnum
 - [x] ZodUndefined
+- [x] ZodVoid
 
 - [x] ZodObject
 - [x] ZodArray

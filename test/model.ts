@@ -38,6 +38,8 @@ export const dataSchema = z.object({
     arrayNumber: z.number().array(),
     testUnion: z.number().or(z.date()),
   }),
+  testVoid: z.void(),
+  testVoidWithUndefined: z.void(),
 });
 
 export type Data = z.infer<typeof dataSchema>;
@@ -67,4 +69,5 @@ export const testData: Data = {
     arrayNumber: [1],
     testUnion: 1,
   },
+  testVoidWithUndefined: undefined,
 };

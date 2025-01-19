@@ -83,6 +83,12 @@ describe("create converter schema", () => {
       );
     });
 
+    it("check void value", () => {
+      expectTypeOf(jsonData.testVoid).toEqualTypeOf<void | undefined>();
+      expect(jsonData.testVoid).toEqual(undefined);
+      expect(jsonData.testVoidWithUndefined).toEqual(undefined);
+    });
+
     it("check custom class type", () => {
       expectTypeOf(jsonData.class).toEqualTypeOf<string | undefined>();
       expect(jsonData.class).toEqual(testData.class.name);
@@ -121,6 +127,12 @@ describe("create converter schema", () => {
       expectTypeOf(data.nullable).toEqualTypeOf<Date | null>();
       expect(data.nullable).toEqual(null);
       expect(data.nullableData).toEqual(testData.nullableData);
+    });
+
+    it("check void value", () => {
+      expectTypeOf(data.testVoid).toEqualTypeOf<void | undefined>();
+      expect(data.testVoid).toEqual(undefined);
+      expect(data.testVoidWithUndefined).toEqual(undefined);
     });
 
     it("check custom class type", () => {
